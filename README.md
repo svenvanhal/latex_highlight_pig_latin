@@ -1,30 +1,35 @@
-TI2736-B_Latex
+Highlight Pig Latin in LaTeX
 ==============
 
-Highlight Pig Latin in LaTex.
+Highlight [Pig Latin](https://en.wikipedia.org/wiki/Apache_Pig) in LaTeX documents.
 
 ![Pig Latin listing](demo.png)
 
-Zet bovenin je document de volgende regel:
+Add the following line to your LaTeX file:
+```latex
+\include(pig_style.tex)
+```
 
-	\include(pig_style.tex)
+```\lstset``` has been configured to use Pig by default. Highlighting a code block is as simple as:
 
-De standaard ```\lstset``` is ingesteld op Pig. Gebruik daarom voor een blok Pig Latin code het volgende:
+```latex
+\begin{lstlisting}
+wikipedia = LOAD 'wikipedia' USING PigStorage('\t') AS (row:chararray);
+tuples = FOREACH wikipedia GENERATE FLATTEN(splitsuc.SPLITSUC(*));
+grouped = GROUP tuples BY (word1, word2, word3, word4) PARALLEL 16;
+grouped_counted = FOREACH grouped GENERATE group, COUNT(tuples);
+STORE grouped_counted INTO 'wikipedia.sql' USING splitsuc.STORESQL();
+\end{lstlisting}
+```
 
-	\begin{lstlisting}
-	wikipedia = LOAD 'wikipedia' USING PigStorage('\t') AS (row:chararray);
-	tuples = FOREACH wikipedia GENERATE FLATTEN(splitsuc.SPLITSUC(*));
-	grouped = GROUP tuples BY (word1, word2, word3, word4) PARALLEL 16;
-	grouped_counted = FOREACH grouped GENERATE group, COUNT(tuples);
-	STORE grouped_counted INTO 'wikipedia.sql' USING splitsuc.STORESQL();
-	\end{lstlisting}
-	
-Mocht je een andere set-up draaien, voeg je het ```lanuage``` attribuut toe aan de ```\begin{lstlisting}```
+For different set-ups, add a ```language``` attribute to ```\begin{lstlisting}```
 
-	\begin{lstlisting}[language=Pig]
-	wikipedia = LOAD 'wikipedia' USING PigStorage('\t') AS (row:chararray);
-	tuples = FOREACH wikipedia GENERATE FLATTEN(splitsuc.SPLITSUC(*));
-	grouped = GROUP tuples BY (word1, word2, word3, word4) PARALLEL 16;
-	grouped_counted = FOREACH grouped GENERATE group, COUNT(tuples);
-	STORE grouped_counted INTO 'wikipedia.sql' USING splitsuc.STORESQL();
-	\end{lstlisting}
+```latex
+\begin{lstlisting}[language=Pig]
+wikipedia = LOAD 'wikipedia' USING PigStorage('\t') AS (row:chararray);
+tuples = FOREACH wikipedia GENERATE FLATTEN(splitsuc.SPLITSUC(*));
+grouped = GROUP tuples BY (word1, word2, word3, word4) PARALLEL 16;
+grouped_counted = FOREACH grouped GENERATE group, COUNT(tuples);
+STORE grouped_counted INTO 'wikipedia.sql' USING splitsuc.STORESQL();
+\end{lstlisting}
+```
